@@ -11,7 +11,7 @@
 <string name="next">下一个</string>
 <string name="okay">好的</string>
 <string name="slide1_heading">欢迎！</string>
-<string name="slide1_text">卷云是一款用于查看您所在位置当前天气及预报的应用程序。</string>
+<string name="slide1_text">天气是一款用于查看您所在位置当前天气及预报的应用程序。</string>
 <string name="slide2_heading" translatable="false">GitHub（开源代码托管平台）</string>
 <string name="slide2_text">这款应用的源代码可在GitHub获取。如需进一步了解，请查看“关于”页面。</string>
 <string name="card_details_heading">现在</string>
@@ -70,7 +70,7 @@ Osmdroid（阿帕奇2.0许可证）
 <string name="settings_intervals">间隔</string>
 <string name="settings_update_interval">更新间隔</string>
 <string name="settings_interval_summary">设置自动更新的间隔</string>
-<string name="about_privacy_answer">卷云仅使用“互联网”权限来获取天气数据。此外，它不包含任何追踪机制或广告。</string>
+<string name="about_privacy_answer">大腕天气仅使用“互联网”权限来获取天气数据。此外，它不包含任何追踪机制或广告。</string>
 <string name="about_where_from">天气信息从哪里获取？</string>
 <string name="about_where_from_answer">天气信息从以下网址获取</string>
 <string name="about_permissions">权限</string>
