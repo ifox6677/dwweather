@@ -1,0 +1,138 @@
+<resources>
+<string name="app_name">精准天气</string>
+<string name="activity_about">关于</string>
+<string name="activity_settings">设置</string>
+<string name="activity_weather">天气</string>
+<string name="activity_manage">管理位置</string>
+<string name="action_refresh">刷新</string>
+<string name="navigation_drawer_open">打开导航抽屉</string>
+<string name="navigation_drawer_close">关闭导航抽屉</string>
+<string name="next">下一个</string>
+<string name="okay">好的</string>
+<string name="slide1_heading">欢迎！</string>
+<string name="slide1_text">卷云是一款用于查看您所在位置当前天气及预报的应用程序。</string>
+<string name="slide2_heading" translatable="false">GitHub（开源代码托管平台）</string>
+<string name="slide2_text">这款应用的源代码可在GitHub获取。如需进一步了解，请查看“关于”页面。</string>
+<string name="card_details_heading">现在</string>
+<string name="card_details_humidity">湿度：</string>
+<string name="card_details_pressure">气压：</string>
+<string name="card_details_wind_speed">风速：</string>
+<string name="card_week_heading">本周</string>
+<string name="card_error_heading">获取天气数据出错</string>
+<string name="card_error_content">请尝试更新！</string>
+<string name="about_privacy_heading">隐私信息</string>
+<string name="about_permission_internet_description">连接网络：需要此权限是因为天气数据需通过向互联网上的服务器发送请求来获取。若没有该权限，则无法接收天气数据。可选：全球定位系统（GPS）授权。</string>
+<string name="about">关于</string>
+<string name="version_number">版本</string>
+<string name="about_license">许可证</string>
+<string name="about_license_text" translatable="false">SECUSO隐私友好天气（通用公共许可证第3版，GPLv3）
+谷歌材质设计图标（阿帕奇2.0许可证）
+Leaflet（两条款BSD许可证）
+Osmdroid（阿帕奇2.0许可证）
+自动建议文本视图应用程序接口调用（AutoSuggestTextViewAPICall，阿帕奇2.0许可证）
+威廉图表（WilliamChart，阿帕奇2.0许可证）
+安卓Volley（阿帕奇2.0许可证）
+安卓材质组件（阿帕奇2.0许可证）
+安卓扩展库（AndroidX，阿帕奇2.0许可证）</string>
+<string name="about_more_info">更多信息可在以下网址查找：</string>
+<string name="about_github" translatable="false"><a href="https://github.com/woheller69/omweather">GitHub仓库</a></string>
+<string name="about_openmeteo" translatable="false"><a href="https://open-meteo.com">开放气象（Open-Meteo，知识共享署名4.0国际许可，CC BY 4.0）</a></string>
+<string name="about_rainviewer" translatable="false"><a href="https://rainviewer.com">雨景（RainViewer）</a></string>
+<string name="activity_settings_title">设置</string>
+<string name="settings_title_units">单位</string>
+<string name="settings_title_temperature">温度</string>
+<string name="settings_celsius">摄氏度</string>
+<string name="settings_fahrenheit">华氏度</string>
+<string name="settings_title_speed">风速</string>
+<string name="abbreviation_monday">周一（Mo.）</string>
+<string name="abbreviation_tuesday">周二（Tu.）</string>
+<string name="abbreviation_wednesday">周三（We.）</string>
+<string name="abbreviation_thursday">周四（Th.）</string>
+<string name="abbreviation_friday">周五（Fr.）</string>
+<string name="abbreviation_saturday">周六（Sa.）</string>
+<string name="abbreviation_sunday">周日（Su.）</string>
+<string name="dialog_add_label">输入要添加的位置：</string>
+<string name="dialog_add_no_city_found">未找到与您输入匹配的位置。建议从下拉列表中选择一项。</string>
+<string name="dialog_add_close_button">关闭</string>
+<string name="dialog_add_add_button">添加</string>
+<string name="error_convert_to_json">获取到的天气数据格式不正确。</string>
+<string name="error_no_internet">您的设备未连接到互联网。</string>
+<string name="error_fetch_forecast">更新预报时出错，请重试！</string>
+<string name="error_no_city_selected">未选择城市。若要选择城市，请前往“管理位置”。</string>
+<string name="settings_interval_quarter">15分钟</string>
+<string name="settings_interval_half">30分钟</string>
+<string name="settings_interval_one">1小时</string>
+<string name="settings_interval_two">2小时</string>
+<string name="settings_interval_six">6小时</string>
+<string name="settings_interval_twelve">12小时</string>
+<string name="settings_interval_twentyfour">24小时</string>
+<string name="settings_intervals">间隔</string>
+<string name="settings_update_interval">更新间隔</string>
+<string name="settings_interval_summary">设置自动更新的间隔</string>
+<string name="about_privacy_answer">卷云仅使用“互联网”权限来获取天气数据。此外，它不包含任何追踪机制或广告。</string>
+<string name="about_where_from">天气信息从哪里获取？</string>
+<string name="about_where_from_answer">天气信息从以下网址获取</string>
+<string name="about_permissions">权限</string>
+<string name="long_press_text">长按并拖动以排序。</string>
+<string name="swipe_to_delete">滑动删除</string>
+<string name="settings_title_display_options">显示选项</string>
+<string name="infoProvider">天气信息从开放气象（Open-Meteo.com）和雨景（Rainviewer.com）获取。</string>
+<string name="monday">星期一</string>
+<string name="tuesday">星期二</string>
+<string name="wednesday">星期三</string>
+<string name="thursday">星期四</string>
+<string name="friday">星期五</string>
+<string name="saturday">星期六</string>
+<string name="sunday">星期日</string>
+<string name="chart">图表</string>
+<string name="units_rh">相对湿度（%rh）</string>
+<string name="units_mm">毫米（mm）</string>
+<string name="units_km">千米（km）</string>
+<string name="units_hPa">百帕（hPa）</string>
+<string name="units_Bft">蒲福风级（Bft）</string>
+<string name="units_mm_h">毫米/小时（mm/h）</string>
+<string name="units_km_h">千米/小时（km/h）</string>
+<string name="units_mph">英里/小时（mph）</string>
+<string name="units_in" translatable="false">英寸（″）</string>
+<string name="card_details_rain60min">60分钟降水量：</string>
+<string name="error_no_rain60min_data">无数据</string>
+<string name="dialog_edit_change_button">修改</string>
+<string name="edit_location_hint_name">名称</string>
+<string name="settings_search">搜索</string>
+<string name="settings_temp_decimal">显示温度保留一位小数</string>
+<string name="settings_darkmode">安卓10及以上版本的深色模式</string>
+<string name="settings_position">位置</string>
+<string name="settings_GPS_summary">允许在第一个标签页以及当前天气小部件中使用当前全球定位系统（GPS）位置。位置更新由小部件自动触发。</string>
+<string name="settings_GPS_position">允许使用GPS</string>
+<string name="error_no_position">无位置信息可用</string>
+<string name="settings_time24h">24小时制</string>
+<string name="summary_time24h">覆盖系统设置</string>
+<string name="dialog_OK_button">确定</string>
+<string name="dialog_NO_button">否</string>
+<string name="dialog_Later_button">稍后再说</string>
+<string name="dialog_StarOnGitHub">您喜欢这款应用吗？请在GitHub上给个星，或者通过贝宝（PayPal）给开发者买杯咖啡。</string>
+<string name="settings_show_pressure">显示气压</string>
+<string name="action_position" translatable="false">更新位置</string>
+<string name="settings_GPS_manual">仅手动更新</string>
+<string name="rationale_background_location">请同时允许在后台使用GPS，以便在小部件中使用。</string>
+<string name="error_no_gps">请打开GPS</string>
+<string name="slide3_heading">开放气象（Open-Meteo）</string>
+<string name="RainViewer">雨雷达</string>
+<string name="action_rainviewer" translatable="false">雨雷达</string>
+<string name="nonFreeNet">允许访问非开源网络雨景（RainViewer.com）。</string>
+<string name="summary_reanalyze">通过分析日出至日落期间的逐小时预报来优化本周图标（实验性）。</string>
+<string name="settings_reanalyze">本周图标</string>
+<string name="settings_precipitation">降水量</string>
+<string name="summary_precipitation">使用降雪量而非等量的水量。</string>
+<string name="settings_forecast_days">预报天数</string>
+<string name="settings_apparent_temperature">显示“体感温度”</string>
+<string name="github" translatable="false">GitHub</string>
+<string name="units_hours">小时（h）</string>
+<string name="settings_title_precipitation">降水量</string>
+<string name="about_license_intro">这款应用依据通用公共许可证第3版（GPLv3）授权。它使用了来自以下的代码：</string>
+<string name="units_m_s">米/秒（m/s）</string>
+<string name="units_kn">节（kn）</string>
+<string name="settings_widget_transparency">小部件透明度</string>
+<string name="units_mi">英里（mi）</string>
+<string name="GridLayout">两列</string>
+</resources>
