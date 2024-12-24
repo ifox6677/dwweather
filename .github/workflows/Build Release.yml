@@ -30,6 +30,10 @@ jobs:
           mkdir android
           echo "Created android directory"
         fi
+        if [ ! -d "android/app" ]; then
+          mkdir android/app
+          echo "Created android/app directory"
+        fi
         echo "keyAlias=${{ secrets.KEY_ALIAS }}" > android/key.properties
         echo "keyPassword=${{ secrets.KEY_PASSWORD }}" >> android/key.properties
         echo "storePassword=${{ secrets.STORE_PASSWORD }}" >> android/key.properties
