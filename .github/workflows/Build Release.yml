@@ -23,17 +23,14 @@ jobs:
         java-version: 17  # Set the Java version to 17
         distribution: 'zulu'  # Use the Zulu JDK distribution
 
+    # Ensure necessary directories exist
+    - name: Create required directories
+      run: |
+        mkdir -p android/app  # Ensure android/app directory exists
+
     # Configure signing properties directly in the file
     - name: Configure signing properties
       run: |
-        if [ ! -d "android" ]; then
-          mkdir android
-          echo "Created android directory"
-        fi
-        if [ ! -d "android/app" ]; then
-          mkdir android/app
-          echo "Created android/app directory"
-        fi
         echo "keyAlias=${{ secrets.KEY_ALIAS }}" > android/key.properties
         echo "keyPassword=${{ secrets.KEY_PASSWORD }}" >> android/key.properties
         echo "storePassword=${{ secrets.STORE_PASSWORD }}" >> android/key.properties
@@ -42,11 +39,11 @@ jobs:
     # Decode keystore file and save it to the specified location
     - name: Decode keystore file
       run: |
-        if [ -z "${{ secrets.KEY_STORE }}" ]; then
-          echo "ERROR: KEY_STORE secret is empty"
+        echo "${{ secrets.KEY_STORE }}" | base64 --decode > android/app/key.jks
+        if [ ! -f android/app/key.jks ]; then
+          echo "ERROR: key.jks file was not created."
           exit 1
         fi
-        echo "${{ secrets.KEY_STORE }}" | base64 --decode > android/app/key.jks
         echo "Successfully decoded keystore file"
 
     # Ensure gradlew is executable
