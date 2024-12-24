@@ -1,5 +1,11 @@
 apply plugin: 'com.android.application'
 
+def keystoreProperties = new Properties()
+def keystorePropertiesFile = rootProject.file('key.properties')
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+}
+
 android {
 
     compileSdk 34
@@ -15,11 +21,28 @@ android {
         buildConfigField "String", "GITHUB_URL","\"https://github.com/ifox6677/dwweather/\""
     }
 
+    signingConfigs {
+        release {
+            // 使用 key.properties 中的签名信息
+            storeFile = file('key.jks')  // 从 key.properties 获取 keystore 文件路径
+            keyAlias keystoreProperties['keyAlias']  // 从 key.properties 获取 keyAlias
+            keyPassword keystoreProperties['keyPassword']  // 从 key.properties 获取 keyPassword
+            storePassword keystoreProperties['storePassword']  // 从 key.properties 获取 storePassword
+        }
+    }
+
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled false  // 启用混淆代码时可以设置为 true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+            // 配置签名
+            signingConfig signingConfigs.release
         }
+    }
+
+    buildFeatures {
+        buildConfig = true  // 启用生成 BuildConfig 文件
     }
 }
 
