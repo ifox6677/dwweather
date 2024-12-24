@@ -1,7 +1,7 @@
 name: Build Release APK
 
 on: 
-  workflow_dispatch:  # 允许手动触发工作流
+  workflow_dispatch:  # Allow manual triggering of the workflow
 
 jobs:
   build:
@@ -9,38 +9,32 @@ jobs:
 
     steps:
     - name: Checkout repo
-      uses: actions/checkout@v2  # 使用 v2 版本
+      uses: actions/checkout@v2  # Use v2 for the checkout action
 
     - name: Setup JDK 17
-      uses: actions/setup-java@v2  # 使用 v2 版本
+      uses: actions/setup-java@v2  # Use v2 for the setup-java action
       with:
-        java-version: 17  # 设置 JDK 版本为 17
-        distribution: 'zulu'  # 选择 Zulu JDK 作为 Java 发行版
+        java-version: 17  # Set the Java version to 17
+        distribution: 'zulu'  # Use the Zulu JDK distribution
 
-    # 设置 PROPERTIES_PATH
-    - name: Set up key properties path
-      run: echo "PROPERTIES_PATH=android/key.properties" >> $GITHUB_ENV  # 设置环境变量
-
-    # 配置签名属性
+    # Configure signing properties directly in the file
     - name: Configure signing properties
       run: |
-        echo "keyAlias=${{ secrets.KEY_ALIAS }}" > ${{ env.PROPERTIES_PATH }}
-        echo "keyPassword=${{ secrets.KEY_PASSWORD }}" >> ${{ env.PROPERTIES_PATH }}
-        echo "storePassword=${{ secrets.STORE_PASSWORD }}" >> ${{ env.PROPERTIES_PATH }}
+        echo "keyAlias=${{ secrets.KEY_ALIAS }}" > android/key.properties
+        echo "keyPassword=${{ secrets.KEY_PASSWORD }}" >> android/key.properties
+        echo "storePassword=${{ secrets.STORE_PASSWORD }}" >> android/key.properties
 
-    # 解码 keystore 文件并保存到指定位置
+    # Decode keystore file and save it to the specified location
     - name: Decode keystore file
       run: echo "${{ secrets.KEY_STORE }}" | base64 --decode > android/app/key.jks
 
-    # 使用 Gradle 构建 release 版本的 APK
+    # Build the release APK using Gradle
     - name: Build with Gradle
-      run: ./gradlew assembleRelease  # 执行构建命令
+      run: ./gradlew assembleRelease  # Run the Gradle build command
 
-    # 上传生成的 APK 文件
+    # Upload the APK as an artifact
     - name: Upload APK
-      uses: actions/upload-artifact@v3  # 使用 v3 版本
+      uses: actions/upload-artifact@v3  # Use v3 for the upload-artifact action
       with:
         name: DDweather-release.apk
-        path: app/build/outputs/apk/release/app-release.apk  # 上传构建好的 APK
-
-
+        path: app/build/outputs/apk/release/app-release.apk  # Path to the release APK
