@@ -15,6 +15,7 @@ jobs:
       uses: actions/setup-java@v2  # 使用 v3 版本
       with:
         java-version: 17  # 设置 JDK 版本为 17
+        distribution: 'zulu'  # 选择 Zulu JDK 作为 Java 发行版
 
     # 配置签名属性
     - name: Configure signing properties
