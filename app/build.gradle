@@ -17,13 +17,13 @@ android {
         versionName "3.5"
 
         buildConfigField "String", "BASE_URL", "\"https://api.open-meteo.com/v1/\""
-        buildConfigField "String", "GITHUB_URL","\"https://github.com/ifox6677/dwweather/\""
+        buildConfigField "String", "GITHUB_URL", "\"https://github.com/ifox6677/dwweather/\""
     }
 
     signingConfigs {
         release {
             if (keystoreProperties['keyAlias']) {
-                storeFile = file('android/app/key.jks')  // 确认路径是否正确
+                storeFile = file('android/app/key.jks') // 确保文件存在
                 keyAlias keystoreProperties['keyAlias']
                 keyPassword keystoreProperties['keyPassword']
                 storePassword keystoreProperties['storePassword']
@@ -35,10 +35,25 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false  // 禁用混淆，发布优化时改为 true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
+
+            // 如果签名配置存在，启用 release 签名；否则使用调试签名
+            signingConfig signingConfigs.release ?: signingConfigs.debug
         }
+    }
+
+    // 解决 Kotlin 版本冲突
+    configurations.all {
+        resolutionStrategy.eachDependency { details ->
+            if (details.requested.group == 'org.jetbrains.kotlin') {
+                details.useVersion '1.8.10' // 统一 Kotlin 版本
+            }
+        }
+    }
+
+    buildFeatures {
+        buildConfig = true
     }
 }
 
@@ -46,7 +61,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'com.diogobernardino:williamchart:2.2'
     implementation 'androidx.preference:preference:1.2.1'
-    implementation 'androidx.appcompat:appcompat:1.5.1'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.9.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'com.android.volley:volley:1.2.1'
