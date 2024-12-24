@@ -40,7 +40,7 @@ jobs:
 
     # 在 GitHub 上创建 Release，并将 APK 文件上传到 Release 页面
     - name: Create release
-      uses: marvinpinto/action-automatic-releases@v3  # 使用 v3 版本
+      uses: marvinpinto/action-automatic-releases@v1  # 使用 v3 版本
       if: github.ref == 'refs/heads/master'  # 仅在 master 分支上创建 release
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
