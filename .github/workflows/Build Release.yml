@@ -11,10 +11,10 @@ jobs:
     - name: Checkout repo
       uses: actions/checkout@v2  # Use v2 for the checkout action
 
-    # 增加一步设置项目目录权限，确保后续操作有足够权限
+    # Set project directory permissions
     - name: Set project directory permissions
       run: |
-        sudo chmod -R 777.
+        sudo chmod -R 755 .  # Proper chmod usage with the dot to target the current directory
         echo "Set permissions for the project directory"
 
     - name: Setup JDK 17
@@ -26,7 +26,7 @@ jobs:
     # Configure signing properties directly in the file
     - name: Configure signing properties
       run: |
-        if [! -d "android" ]; then
+        if [ ! -d "android" ]; then
           mkdir android
           echo "Created android directory"
         fi
@@ -45,10 +45,14 @@ jobs:
         echo "${{ secrets.KEY_STORE }}" | base64 --decode > android/app/key.jks
         echo "Successfully decoded keystore file"
 
+    # Ensure gradlew is executable
+    - name: Make gradlew executable
+      run: chmod +x gradlew
+
     # Build the release APK using Gradle
     - name: Build with Gradle
       run: |
-       ./gradlew assembleRelease || (echo "Gradle build failed, check the logs" && exit 1)
+        ./gradlew assembleRelease || (echo "Gradle build failed, check the logs" && exit 1)
         echo "Successfully built the release APK"
 
     # Upload the APK as an artifact
@@ -57,6 +61,3 @@ jobs:
       with:
         name: DDweather-release.apk
         path: app/build/outputs/apk/release/app-release.apk  # Path to the release APK
-
-    # Create a release on GitHub and upload the APK to the release page
-    
