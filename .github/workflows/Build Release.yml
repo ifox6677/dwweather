@@ -17,6 +17,10 @@ jobs:
         java-version: 17  # 设置 JDK 版本为 17
         distribution: 'zulu'  # 选择 Zulu JDK 作为 Java 发行版
 
+    # 设置 PROPERTIES_PATH
+    - name: Set up key properties path
+      run: echo "PROPERTIES_PATH=android/key.properties" >> $GITHUB_ENV  # 设置环境变量
+
     # 配置签名属性
     - name: Configure signing properties
       run: |
@@ -39,5 +43,4 @@ jobs:
         name: DDweather-release.apk
         path: app/build/outputs/apk/release/app-release.apk  # 上传构建好的 APK
 
-    # 在 GitHub 上创建 Release，并将 APK 文件上传到 Release 页面
-    
+
