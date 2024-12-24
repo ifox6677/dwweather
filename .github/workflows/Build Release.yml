@@ -12,7 +12,7 @@ jobs:
       uses: actions/checkout@v2  # 使用 v2 版本
 
     - name: Setup JDK 17
-      uses: actions/setup-java@v3  # 使用 v3 版本
+      uses: actions/setup-java@v2  # 使用 v3 版本
       with:
         java-version: 17  # 设置 JDK 版本为 17
 
