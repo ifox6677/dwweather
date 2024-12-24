@@ -40,4 +40,4 @@ jobs:
 
     # 在 GitHub 上创建 Release，并将 APK 文件上传到 Release 页面
   
-          app/build/outputs/apk/release/app-release.apk  # 上传构建好的 APK 到 Release 页面
+          #app/build/outputs/apk/release/app-release.apk  # 上传构建好的 APK 到 Release 页面
