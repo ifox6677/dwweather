@@ -22,16 +22,17 @@ android {
 
     signingConfigs {
         release {
-            if (keystoreProperties['keyAlias']) {
-                storeFile = file('android/app/key.jks') // 确保文件存在
+            if (keystorePropertiesFile.exists()) {
+                storeFile = file('android/app/key.jks')
                 keyAlias keystoreProperties['keyAlias']
                 keyPassword keystoreProperties['keyPassword']
                 storePassword keystoreProperties['storePassword']
             } else {
-                println "WARNING: Signing config not provided. Using debug signing configuration."
+                println "WARNING: No keystore provided. Debug signing configuration will be used."
             }
         }
     }
+
 
     buildTypes {
         release {
