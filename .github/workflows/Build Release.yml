@@ -59,4 +59,4 @@ jobs:
       uses: actions/upload-artifact@v3  # Use v3 for the upload-artifact action
       with:
         name: DDweather-release
-        path: app/build/outputs/apk/release/  # Path to the release APK
+        path: app/build/outputs/apk/release/app-arm64-v8a-release.apk  # Path to the release APK
