@@ -7,14 +7,14 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
-    compileSdk 34
+    compileSdk 34  // 编译 SDK 版本
 
     defaultConfig {
         applicationId "org.ifox6677.dwweather"
-        minSdk 21
-        targetSdk 34
-        versionCode 35
-        versionName "3.5"
+        minSdk 21  // 最低 SDK 版本
+        targetSdk 34  // 目标 SDK 版本
+        versionCode 35  // 版本号
+        versionName "3.5"  // 版本名称
 
         buildConfigField "String", "BASE_URL", "\"https://api.open-meteo.com/v1/\""
         buildConfigField "String", "GITHUB_URL", "\"https://github.com/ifox6677/dwweather/\""
@@ -22,13 +22,10 @@ android {
 
     signingConfigs {
         release {
-            //From decoded key
             storeFile = file('key.jks')
-
             keyAlias keystoreProperties['keyAlias']
             keyPassword keystoreProperties['keyPassword']
             storePassword keystoreProperties['storePassword']
-
         }
     }
 
@@ -36,8 +33,6 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-
-            // 如果签名配置存在，启用 release 签名；否则使用调试签名
             signingConfig signingConfigs.release ?: signingConfigs.debug
         }
     }
@@ -46,13 +41,23 @@ android {
     configurations.all {
         resolutionStrategy.eachDependency { details ->
             if (details.requested.group == 'org.jetbrains.kotlin') {
-                details.useVersion '1.8.10' // 统一 Kotlin 版本
+                details.useVersion '1.8.10'
             }
         }
     }
 
     buildFeatures {
         buildConfig = true
+    }
+
+    // 只生成 arm64-v8a 架构的 APK
+    splits {
+        abi {
+            enable true  // 启用 ABI 分割
+            reset()  // 重置 ABI 配置
+            include 'arm64-v8a'  // 只包括 arm64-v8a 架构
+            universalApk false  // 不生成通用 APK
+        }
     }
 }
 
