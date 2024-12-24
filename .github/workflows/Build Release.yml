@@ -12,7 +12,7 @@ jobs:
       uses: actions/checkout@v2  # 使用 v2 版本
 
     - name: Setup JDK 17
-      uses: actions/setup-java@v2  # 使用 v3 版本
+      uses: actions/setup-java@v2  # 使用 v2 版本
       with:
         java-version: 17  # 设置 JDK 版本为 17
         distribution: 'zulu'  # 选择 Zulu JDK 作为 Java 发行版
@@ -40,5 +40,13 @@ jobs:
         path: app/build/outputs/apk/release/app-release.apk  # 上传构建好的 APK
 
     # 在 GitHub 上创建 Release，并将 APK 文件上传到 Release 页面
-  
-          #app/build/outputs/apk/release/app-release.apk  # 上传构建好的 APK 到 Release 页面
+    - name: Create release
+      uses: marvinpinto/action-automatic-releases@v1  # 使用 v1 版本
+      if: github.ref == 'refs/heads/master'  # 仅在 master 分支上创建 release
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        automatic_release_tag: "latest"  # 设置 release 标签
+        prerelease: false  # 设置为正式发布，不是预发布
+        title: ${{ github.sha }}  # 使用当前 commit 的 SHA 作为 release 标题
+        files: |
+          app/build/outputs/apk/release/app-release.apk  # 上传构建好的 APK 到 Release 页面
