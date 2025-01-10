@@ -11,14 +11,14 @@ android {
         includeInApk = false
         includeInBundle = false
     }
-    compileSdk 34  // 编译 SDK 版本
+    compileSdk 34
 
     defaultConfig {
         applicationId "org.ifox6677.afaweather"
-        minSdk 21  // 最低 SDK 版本
-        targetSdk 34  // 目标 SDK 版本
-        versionCode 35  // 版本号
-        versionName "3.5.3"  // 版本名称
+        minSdk 21
+        targetSdk 34
+        versionCode 35
+        versionName "3.5.3"
 
         buildConfigField "String", "BASE_URL", "\"https://api.open-meteo.com/v1/\""
         buildConfigField "String", "GITHUB_URL", "\"https://github.com/ifox6677/dwweather/\""
@@ -26,7 +26,7 @@ android {
 
     signingConfigs {
         release {
-            storeFile = file('key.jks')
+            storeFile file('key.jks')
             keyAlias keystoreProperties['keyAlias']
             keyPassword keystoreProperties['keyPassword']
             storePassword keystoreProperties['storePassword']
@@ -37,11 +37,11 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release ?: signingConfigs.debug
+            signingConfig signingConfigs.release
         }
     }
 
-    // 解决 Kotlin 版本冲突
+    // Kotlin version conflict resolution
     configurations.all {
         resolutionStrategy.eachDependency { details ->
             if (details.requested.group == 'org.jetbrains.kotlin') {
@@ -51,60 +51,57 @@ android {
     }
 
     buildFeatures {
-        compose = true
-        buildConfig = true
+        compose true
+        buildConfig true
     }
 
-// build variants and stuff
+    composeOptions {
+        kotlinCompilerExtensionVersion "1.4.3"
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION 17
+        targetCompatibility JavaVersion.VERSION 17
+        coreLibraryDesugaringEnabled true
+    }
+
     splits {
         abi {
-            isEnable = true
+            enable true
             reset()
-            isUniversalApk = false
+            universalApk false
         }
     }
-    
-    productFlavors {
-        // universal
-        create("universal") {
-            isDefault = true
-            dimension = "abi"
-            ndk {
-                abiFilters.addAll(listOf("x86", "x86_64", "armeabi-v7a", "arm64-v8a"))
-            }
-        }
-    flavorDimensions.add("abi")
+
+    flavorDimensions "abi"
 
     productFlavors {
-        // universal
-        create("universal") {
+        universal {
             isDefault = true
-            dimension = "abi"
+            dimension "abi"
             ndk {
-                abiFilters.addAll(listOf("x86", "x86_64", "armeabi-v7a", "arm64-v8a"))
+                abiFilters "x86", "x86_64", "armeabi-v7a", "arm64-v8a"
             }
         }
-        // arm64 only
-        create("arm64") {
-            dimension = "abi"
+        arm64 {
+            dimension "abi"
             ndk {
-                abiFilters.add("arm64-v8a")
+                abiFilters "arm64-v8a"
             }
         }
-        // x86_64 only
-        create("x86_64") {
-            dimension = "abi"
+        x86_64 {
+            dimension "abi"
             ndk {
-                abiFilters.add("x86_64")
+                abiFilters "x86_64"
             }
         }
-        // for uncommon, but non-obscure architectures
-        create("uncommon_abi") {
-            dimension = "abi"
+        uncommon_abi {
+            dimension "abi"
             ndk {
-                abiFilters.addAll(listOf("x86", "x86_64", "armeabi-v7a"))
+                abiFilters "x86", "x86_64", "armeabi-v7a"
             }
         }
+    }
 }
 
 dependencies {
@@ -120,4 +117,5 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel:2.6.1"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1"
     implementation 'org.osmdroid:osmdroid-android:6.1.18'
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.4'
 }
