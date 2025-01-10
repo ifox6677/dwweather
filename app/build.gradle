@@ -2,6 +2,10 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android' version '1.8.10'
 }
+
+// 定义 Kotlin 版本
+ext.kotlin_version = '1.8.10'
+
 def keystoreProperties = new Properties()
 def keystorePropertiesFile = rootProject.file('key.properties')
 if (keystorePropertiesFile.exists()) {
