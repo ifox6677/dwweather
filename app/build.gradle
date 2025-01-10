@@ -1,16 +1,9 @@
-apply plugin: 'com.android.application'
-
-def keystoreProperties = new Properties()
-def keystorePropertiesFile = rootProject.file('key.properties')
-if (keystorePropertiesFile.exists()) {
-    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android' version '1.8.10'
 }
 
 android {
-    dependenciesInfo {
-        includeInApk = false
-        includeInBundle = false
-    }
     compileSdk 34
 
     defaultConfig {
@@ -41,22 +34,13 @@ android {
         }
     }
 
-    // Kotlin version conflict resolution
-    configurations.all {
-        resolutionStrategy.eachDependency { details ->
-            if (details.requested.group == 'org.jetbrains.kotlin') {
-                details.useVersion '1.8.10'
-            }
-        }
-    }
-
     buildFeatures {
         compose true
         buildConfig true
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion "1.4.3"
+        kotlinCompilerExtensionVersion '1.4.3'
     }
 
     compileOptions {
@@ -65,12 +49,8 @@ android {
         coreLibraryDesugaringEnabled true
     }
 
-    splits {
-        abi {
-            enable true
-            reset()
-            universalApk false
-        }
+    kotlinOptions {
+        jvmTarget = '17'
     }
 
     flavorDimensions "abi"
@@ -118,4 +98,13 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1"
     implementation 'org.osmdroid:osmdroid-android:6.1.18'
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.4'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+}
+
+configurations.all {
+    resolutionStrategy.eachDependency { details ->
+        if (details.requested.group == 'org.jetbrains.kotlin') {
+            details.useVersion '1.8.10'
+        }
+    }
 }
