@@ -16,7 +16,7 @@ if (keystorePropertiesFile.exists()) {
 
 android {
     compileSdk 34
-
+    coreLibraryDesugaringEnabled false
     defaultConfig {
         applicationId "org.ifox6677.afaweather"
         minSdk 21
