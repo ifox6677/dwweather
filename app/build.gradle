@@ -23,11 +23,12 @@ android {
         minSdk 21
         targetSdk 34
         versionCode 37
-        versionName "3.7"
+        versionName "3.5.3"
 
         buildConfigField "String", "BASE_URL", "\"https://api.open-meteo.com/v1/\""
-        buildConfigField "String", "GITHUB_URL","\"https://github.com/woheller69/omweather/\""
+        buildConfigField "String", "GITHUB_URL", "\"https://github.com/woheller69/omweather/\""
     }
+
     signingConfigs {
         release {
             storeFile file('key.jks')
@@ -43,6 +44,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
     configurations.all {
         resolutionStrategy.eachDependency { details ->
             if (details.requested.group == 'org.jetbrains.kotlin') {
@@ -50,8 +52,9 @@ android {
             }
         }
     }
+
     buildConfig = true
-    }
+
     // 只生成 arm64-v8a 架构的 APK
     splits {
         abi {
