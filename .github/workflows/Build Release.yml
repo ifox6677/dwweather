@@ -51,7 +51,7 @@ jobs:
     # Build the release APK using Gradle
     - name: Build with Gradle
       run: |
-        ./gradlew assembleArm64Release || (echo "Gradle build failed, check the logs" && exit 1)
+        ./gradlew assembleRelease || (echo "Gradle build failed, check the logs" && exit 1)
         echo "Successfully built the release APK"
 
     # Upload the APK as an artifact
