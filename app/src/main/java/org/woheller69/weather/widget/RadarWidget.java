@@ -1,4 +1,3 @@
-
 package org.woheller69.weather.widget;
 
 
