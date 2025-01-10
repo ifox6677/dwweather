@@ -7,10 +7,14 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
+    dependenciesInfo {
+        includeInApk = false
+        includeInBundle = false
+    }
     compileSdk 34  // 编译 SDK 版本
 
     defaultConfig {
-        applicationId "org.ifox6677.dwweather"
+        applicationId "org.ifox6677.afaweather"
         minSdk 21  // 最低 SDK 版本
         targetSdk 34  // 目标 SDK 版本
         versionCode 35  // 版本号
