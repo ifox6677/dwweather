@@ -1,4 +1,3 @@
-
 package org.woheller69.weather.services;
 
 import static com.android.volley.toolbox.ImageRequest.DEFAULT_IMAGE_BACKOFF_MULT;
