@@ -17,20 +17,39 @@ jobs:
         java-version: 17
 
     - name: Build with Gradle
-      run: ./gradlew assembleDebug
+      run: |
+        chmod +x ./gradlew
+        ./gradlew assembleDebug --no-daemon
 
-    - uses: actions/upload-artifact@v4
+    - name: Find generated APK
+      id: find_apk
+      run: |
+        echo "Searching for APK in app/build/outputs..."
+        # 查找第一个 apk（按文件系统顺序），如果没有会失败并终止 job
+        apk=$(find app/build/outputs -type f -name "*.apk" | head -n 1 || true)
+        if [ -z "$apk" ]; then
+          echo "No APK found under app/build/outputs. Listing files for debugging:"
+          ls -R app/build || true
+          echo "##[error]APK 未找到，构建可能失败或输出路径不同。"
+          exit 1
+        fi
+        echo "Found APK: $apk"
+        # 将 apk 路径作为 step 的输出
+        echo "apk_path=$apk" >> $GITHUB_OUTPUT
+
+    - name: Upload artifact (APK)
+      uses: actions/upload-artifact@v4
       with:
         name: DDweather.apk
-        path: app/build/outputs/apk/debug/app-debug.apk
+        path: ${{ steps.find_apk.outputs.apk_path }}
 
-    - name: Create release
-      uses: marvinpinto/action-automatic-releases@latest
+    - name: Create release (automatic)
       if: github.ref == 'refs/heads/master'
+      uses: marvinpinto/action-automatic-releases@latest
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         automatic_release_tag: "latest"
         prerelease: false
         title: ${{ github.sha }}
         files: |
-          app/build/outputs/apk/debug/app-debug.apk
+          ${{ steps.find_apk.outputs.apk_path }}
