@@ -166,7 +166,7 @@ public class UpdateDataService extends JobIntentService {
                 0, 0, ImageView.ScaleType.CENTER_CROP, Bitmap.Config.RGB_565,
                 error1 -> {
                     // Handle the error
-                    Log.d("DownloadRadarTile:", error1.toString());
+                    Log.d("DownloadRadarTile:", error1.toString()+" "+radarUrl);
                 });
         imageRequest.setRetryPolicy(
                 new DefaultRetryPolicy(

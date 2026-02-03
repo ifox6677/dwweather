@@ -1,0 +1,4 @@
+RainViewer:
+- removed infrared layers
+- reduced zoom, also in Widget
+due to discontinuation of services
