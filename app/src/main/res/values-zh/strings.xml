@@ -49,7 +49,7 @@
 
     <string name="about_more_info">更多信息请访问：</string>
     <string name="about_github" translatable="false">
-        <a href="https://github.com/woheller69/omweather">GitHub 仓库</a>
+        <a href="https://github.com/ifox6677/omweather">GitHub 仓库</a>
     </string>
     <string name="about_openmeteo" translatable="false">
         <a href="https://open-meteo.com">Open-Meteo \n（署名 4.0 国际 CC BY 4.0）</a>
