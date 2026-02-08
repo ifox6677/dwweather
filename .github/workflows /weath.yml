@@ -1,4 +1,4 @@
-name: weath-build
+name: build
 
 on: [workflow_dispatch]
 
