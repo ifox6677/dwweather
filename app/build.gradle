@@ -17,11 +17,11 @@ android {
     compileSdk 35
 
     defaultConfig {
-        applicationId "org.woheller69.omweather"
+        applicationId "org.ifox6677.afaweather"
         minSdk 21
         targetSdk 35
-        versionCode 44
-        versionName "4.4"
+        versionCode 38
+        versionName "3.8.9"
 
         buildConfigField "String", "BASE_URL", "\"https://api.open-meteo.com/v1/\""
         buildConfigField "String", "GITHUB_URL","\"https://github.com/woheller69/omweather/\""
