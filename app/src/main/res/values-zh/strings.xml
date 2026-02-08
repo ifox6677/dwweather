@@ -36,20 +36,13 @@
     <string name="about_license">许可证</string>
 
     <string name="about_license_text" translatable="false">
-        SECUSO Privacy Friendly Weather (GPLv3)\n
-        Google Material Design Icons (Apache-2.0)\n
-        Leaflet (2-clause BSD License)\n
-        Osmdroid (Apache-2.0)\n
-        AutoSuggestTextViewAPICall (Apache-2.0)\n
-        WilliamChart (Apache-2.0)\n
-        Android Volley (Apache-2.0)\n
-        Android Material Components (Apache-2.0)\n
-        AndroidX (Apache-2.0)
+        粤天气\n
+        西河不准科技构建
     </string>
 
     <string name="about_more_info">更多信息请访问：</string>
     <string name="about_github" translatable="false">
-        <a href="https://github.com/ifox6677/omweather">GitHub 仓库</a>
+        <a href="https://github.com/ifox6677/dwweather">GitHub 仓库</a>
     </string>
     <string name="about_openmeteo" translatable="false">
         <a href="https://open-meteo.com">Open-Meteo \n（署名 4.0 国际 CC BY 4.0）</a>
