@@ -126,7 +126,7 @@
     <string name="units_mm">毫米</string>
     <string name="units_km">公里</string>
     <string name="units_hPa">百帕</string>
-    <string name="units_Bft">级风</string>
+    <string name="units_Bft">级</string>
     <string name="units_mm_h">毫米/小时</string>
     <string name="units_km_h">公里/小时</string>
     <string name="units_mph">英里/小时</string>
