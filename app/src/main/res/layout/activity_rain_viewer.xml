@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:layoutDirection="ltr"
     android:fitsSystemWindows="true"
-    tools:context=".activities.RainViewerActivity"
+    tools:context="org.zhangjq0908.weather.activities.RainViewerActivity"
     android:orientation="vertical">
 
     <include layout="@layout/toolbar" />

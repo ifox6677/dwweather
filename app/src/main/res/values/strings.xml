@@ -53,6 +53,8 @@
     <string name="error_no_city_selected">There is no city selected. To select a city go to \"Manage locations\".</string>
     <string name="settings_interval_quarter">15 min</string>
     <string name="settings_interval_half">30 min</string>
+    <string name="settings_interval_45">45 min</string>
+    <string name="settings_interval_60">60 min</string>
     <string name="settings_interval_one">1 h</string>
     <string name="settings_interval_two">2 h</string>
     <string name="settings_interval_six">6 h</string>

@@ -30,6 +30,15 @@
             android:defaultValue="false"
             />
 
+        <ListPreference
+            app:useSimpleSummaryProvider="true"
+            android:defaultValue="30"
+            android:entries="@array/syncIntervalArray"
+            android:entryValues="@array/syncIntervalValues"
+            android:key="pref_sync_interval_minutes"
+            android:title="@string/settings_update_interval"
+            android:summary="@string/settings_interval_summary" />
+
         <SeekBarPreference
             android:key="pref_number_days"
             android:title="@string/settings_forecast_days"

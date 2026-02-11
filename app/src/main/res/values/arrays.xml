@@ -54,6 +54,20 @@
         <item>24</item>
     </string-array>
 
+    <string-array name="syncIntervalArray">
+        <item>@string/settings_interval_quarter</item>
+        <item>@string/settings_interval_half</item>
+        <item>@string/settings_interval_45</item>
+        <item>@string/settings_interval_60</item>
+    </string-array>
+
+    <string-array name="syncIntervalValues">
+        <item>15</item>
+        <item>30</item>
+        <item>45</item>
+        <item>60</item>
+    </string-array>
+
     <!-- dots inactive colors -->
     <color name="dot_dark_screen">#026499</color>
 

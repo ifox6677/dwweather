@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
-        tools:context="org.woheller69.weather.activities.SettingsActivity">
+        tools:context="org.zhangjq0908.weather.org.zhangjq0908.weather.activities.SettingsActivity">
 
         <include layout="@layout/toolbar" />
 
@@ -20,12 +20,12 @@
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
             android:orientation="vertical"
-            tools:context=".activities.SettingsActivity"
+            tools:context="org.zhangjq0908.weather.activities.SettingsActivity"
             android:layout_marginTop="?attr/actionBarSize"
             android:weightSum="1">
 
         <androidx.fragment.app.FragmentContainerView
-            android:name="org.woheller69.weather.activities.SettingsActivity$GeneralPreferenceFragment"
+            android:name="org.zhangjq0908.weather.activities.SettingsActivity$GeneralPreferenceFragment"
             android:id="@+id/settings_fragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />

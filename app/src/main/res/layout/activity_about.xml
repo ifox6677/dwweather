@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
-        tools:context=".activities.AboutActivity">
+        tools:context="org.zhangjq0908.weather.activities.AboutActivity">
 
         <LinearLayout
             android:layout_width="match_parent"

@@ -13,11 +13,11 @@ android {
     }
 
     android.buildFeatures.buildConfig true
-    namespace 'org.woheller69.weather'
+    namespace "org.zhangjq0908.weather"
     compileSdk 35
 
     defaultConfig {
-        applicationId "org.ifox6677.afaweather"
+        applicationId "org.zhangjq0908.weather"
         minSdk 21
         targetSdk 35
         versionCode 38
@@ -29,8 +29,12 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            ndk {
+                abiFilters "arm64-v8a"
+            }
         }
     }
 }

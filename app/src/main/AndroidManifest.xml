@@ -24,13 +24,13 @@
         <meta-data android:name="android.webkit.WebView.MetricsOptOut"
             android:value="true" />
 
-        <activity android:name="org.woheller69.weather.activities.RainViewerActivity"
-            android:parentActivityName="org.woheller69.weather.activities.ForecastCityActivity"
+        <activity android:name="org.zhangjq0908.weather.activities.RainViewerActivity"
+            android:parentActivityName="org.zhangjq0908.weather.activities.ForecastCityActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:label="@string/RainViewer"/>
 
         <activity
-            android:name="org.woheller69.weather.activities.SplashActivity"
+            android:name="org.zhangjq0908.weather.activities.SplashActivity"
             android:theme="@style/SplashTheme"
             android:exported="true">
             <intent-filter>
@@ -39,58 +39,58 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="org.woheller69.weather.activities.ManageLocationsActivity"
+            android:name="org.zhangjq0908.weather.activities.ManageLocationsActivity"
             android:launchMode="singleTop"
             android:label="@string/activity_manage"
             android:theme="@style/AppTheme.NoActionBar"
-            android:parentActivityName="org.woheller69.weather.activities.ForecastCityActivity" />
+            android:parentActivityName="org.zhangjq0908.weather.activities.ForecastCityActivity" />
         <activity
-            android:name="org.woheller69.weather.activities.ForecastCityActivity"
+            android:name="org.zhangjq0908.weather.activities.ForecastCityActivity"
             android:launchMode="singleTop"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name="org.woheller69.weather.activities.AboutActivity"
+            android:name="org.zhangjq0908.weather.activities.AboutActivity"
             android:label="@string/about"
-            android:parentActivityName="org.woheller69.weather.activities.ForecastCityActivity"
+            android:parentActivityName="org.zhangjq0908.weather.activities.ForecastCityActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.woheller69.weather.activities.ForecastCityActivity" />
+                android:value="org.zhangjq0908.weather.activities.ForecastCityActivity" />
         </activity>
 
         <activity
-            android:name="org.woheller69.weather.activities.SettingsActivity"
+            android:name="org.zhangjq0908.weather.activities.SettingsActivity"
             android:label="@string/activity_settings_title"
-            android:parentActivityName="org.woheller69.weather.activities.ForecastCityActivity"
+            android:parentActivityName="org.zhangjq0908.weather.activities.ForecastCityActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.woheller69.weather.activities.ForecastCityActivity" />
+                android:value="org.zhangjq0908.weather.activities.ForecastCityActivity" />
 
         </activity>
 
 
         <activity
-            android:name="org.woheller69.weather.activities.BackupRestoreActivity"
+            android:name="org.zhangjq0908.weather.activities.BackupRestoreActivity"
             android:label="@string/activity_backuprestore"
-            android:parentActivityName="org.woheller69.weather.activities.ForecastCityActivity"
+            android:parentActivityName="org.zhangjq0908.weather.activities.ForecastCityActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.woheller69.weather.activities.ForecastCityActivity" />
+                android:value="org.zhangjq0908.weather.activities.ForecastCityActivity" />
         </activity>
 
         <activity
-            android:name="org.woheller69.weather.firststart.TutorialActivity"
+            android:name="org.zhangjq0908.weather.firststart.TutorialActivity"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <service
-            android:name="org.woheller69.weather.services.UpdateDataService"
+            android:name="org.zhangjq0908.weather.services.UpdateDataService"
             android:permission="android.permission.BIND_JOB_SERVICE"
             android:exported="false" />
 
-        <receiver android:name="org.woheller69.weather.widget.WeatherWidget"
+        <receiver android:name="org.zhangjq0908.weather.widget.WeatherWidget"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -101,7 +101,7 @@
                 android:resource="@xml/weather_widget_info" />
         </receiver>
 
-        <receiver android:name="org.woheller69.weather.widget.WeatherDigitalClockWidget"
+        <receiver android:name="org.zhangjq0908.weather.widget.WeatherDigitalClockWidget"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -112,7 +112,7 @@
                 android:resource="@xml/weather_digital_clock_widget_info" />
         </receiver>
 
-        <receiver android:name="org.woheller69.weather.widget.WeatherWidget5day"
+        <receiver android:name="org.zhangjq0908.weather.widget.WeatherWidget5day"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -123,7 +123,7 @@
                 android:resource="@xml/weather_widget_5day_info" />
         </receiver>
 
-        <receiver android:name="org.woheller69.weather.widget.WeatherWidgetAllInOne"
+        <receiver android:name="org.zhangjq0908.weather.widget.WeatherWidgetAllInOne"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -134,7 +134,7 @@
                 android:resource="@xml/weather_widget_all_in_one_info" />
         </receiver>
 
-        <receiver android:name="org.woheller69.weather.widget.RadarWidget"
+        <receiver android:name="org.zhangjq0908.weather.widget.RadarWidget"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
