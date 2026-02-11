@@ -118,9 +118,9 @@ public class ForecastCityActivity extends NavigationActivity implements IUpdatea
                 SharedPreferences prefManager = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                 SQLiteHelper database = SQLiteHelper.getInstance(getApplicationContext().getApplicationContext());
                 CurrentWeatherData currentWeather = database.getCurrentWeatherByCityId(pagerAdapter.getCityIDForPos(position));
-                long timestamp = currentWeather.getTimestamp();   // 如果它是毫秒就直接用
-                long systemTime = System.currentTimeMillis();     // 毫秒
-                long updateInterval = (long) (0.25 * 60 * 60 * 1000); // 毫秒
+                long timestamp = currentWeather.getTimestamp();      // 秒
+                long systemTime = System.currentTimeMillis() / 1000; // 秒
+                long updateInterval = (long) (0.25 * 60 * 60);       // 秒
                  if (timestamp + updateInterval - systemTime <= 0) {
                     if (pagerAdapter.getCityIDForPos(position)!=getWidgetCityID(context)||locationListenerGPS==null) { //do not update first TAB while location is updating
                         WeatherPagerAdapter.refreshSingleData(getApplicationContext(),true, pagerAdapter.getCityIDForPos(position));
