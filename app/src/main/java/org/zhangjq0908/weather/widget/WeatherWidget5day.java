@@ -29,9 +29,6 @@ import java.util.List;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
-import static androidx.core.app.JobIntentService.enqueueWork;
-import static org.zhangjq0908.weather.services.UpdateDataService.SKIP_UPDATE_INTERVAL;
-
 import androidx.preference.PreferenceManager;
 import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.PeriodicWorkRequest;
@@ -46,11 +43,7 @@ public class WeatherWidget5day extends AppWidgetProvider {
 
             int cityID = getWidgetCityID(context);
 
-            Intent intent = new Intent(context, UpdateDataService.class);
-            intent.setAction(UpdateDataService.UPDATE_SINGLE_ACTION);
-            intent.putExtra("cityId", cityID);
-            intent.putExtra(SKIP_UPDATE_INTERVAL, true);
-            enqueueWork(context, UpdateDataService.class, 0, intent);
+            UpdateDataService.enqueueWork(context, UpdateDataService.UPDATE_SINGLE_ACTION, cityID, true);
         }
     }
 

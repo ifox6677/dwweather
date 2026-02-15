@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Handler;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.activity.OnBackPressedCallback;
 import androidx.preference.PreferenceManager;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.navigation.NavigationView.OnNavigationItemSelectedListener;
@@ -84,25 +85,26 @@ public class NavigationActivity extends AppCompatActivity implements OnNavigatio
 
         }
 
-    }
-
-    @Override
-    public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            if (getNavigationDrawerID()!=R.id.nav_weather)
-            {
-                Intent intent = new Intent(this, ForecastCityActivity.class);
-                startActivity(intent);
-            }else{
-                Intent intent = new Intent();
-                intent.setAction(Intent.ACTION_MAIN);
-                intent.addCategory(Intent.CATEGORY_HOME);
-                startActivity(intent);
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                if (drawer.isDrawerOpen(GravityCompat.START)) {
+                    drawer.closeDrawer(GravityCompat.START);
+                } else {
+                    if (getNavigationDrawerID()!=R.id.nav_weather)
+                    {
+                        Intent intent = new Intent(NavigationActivity.this, ForecastCityActivity.class);
+                        startActivity(intent);
+                    }else{
+                        Intent intent = new Intent();
+                        intent.setAction(Intent.ACTION_MAIN);
+                        intent.addCategory(Intent.CATEGORY_HOME);
+                        startActivity(intent);
+                    }
+                }
             }
-        }
+        });
     }
 
     protected int getNavigationDrawerID() {

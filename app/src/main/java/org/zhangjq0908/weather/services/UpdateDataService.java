@@ -6,7 +6,6 @@ import static com.android.volley.toolbox.ImageRequest.DEFAULT_IMAGE_MAX_RETRIES;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -19,7 +18,11 @@ import android.os.Handler;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
-import androidx.core.app.JobIntentService;
+import androidx.work.Data;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
+import androidx.work.Worker;
+import androidx.work.WorkerParameters;
 
 import android.util.Log;
 import android.widget.ImageView;
@@ -58,122 +61,145 @@ import java.util.concurrent.TimeoutException;
  * This class provides the functionality to fetch forecast data for a given city as a background
  * task.
  */
-public class UpdateDataService extends JobIntentService {
+public class UpdateDataService extends Worker {
 
     public static final String UPDATE_SINGLE_ACTION = "org.services.weather.zhangjq0908.UpdateDataService.UPDATE_SINGLE_ACTION";
     public static final String UPDATE_RADAR = "org.services.weather.zhangjq0908.UpdateDataService.UPDATE_RADAR";
     public static final String SKIP_UPDATE_INTERVAL = "skipUpdateInterval";
+    public static final String ACTION = "action";
+    public static final String CITY_ID = "cityId";
+
     private SQLiteHelper dbHelper;
+    private Context context;
 
-    /**
-     * Constructor.
-     */
-    public UpdateDataService() {
-        super();
+    public UpdateDataService(@NonNull Context context, @NonNull WorkerParameters params) {
+        super(context, params);
+        this.context = context;
+        this.dbHelper = SQLiteHelper.getInstance(context);
     }
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        dbHelper = SQLiteHelper.getInstance(getApplicationContext());
+    public static void enqueueWork(Context context, String action, int cityId, boolean skipUpdateInterval) {
+        Data inputData = new Data.Builder()
+                .putString(ACTION, action)
+                .putInt(CITY_ID, cityId)
+                .putBoolean(SKIP_UPDATE_INTERVAL, skipUpdateInterval)
+                .build();
+
+        OneTimeWorkRequest workRequest = new OneTimeWorkRequest.Builder(UpdateDataService.class)
+                .setInputData(inputData)
+                .build();
+
+        WorkManager.getInstance(context).enqueue(workRequest);
     }
 
+    @NonNull
     @Override
-    protected void onHandleWork(Intent intent) {
+    public Result doWork() {
         if (!isOnline(2000)) {
-            Handler h = new Handler(getApplicationContext().getMainLooper());
+            Handler h = new Handler(context.getMainLooper());
             h.post(() -> {
-                if (NavigationActivity.isVisible) Toast.makeText(getApplicationContext(), getResources().getString(R.string.error_no_internet), Toast.LENGTH_LONG).show();
+                if (NavigationActivity.isVisible) Toast.makeText(context, context.getResources().getString(R.string.error_no_internet), Toast.LENGTH_LONG).show();
             });
-            return;
+            return Result.failure();
         }
 
-        if (intent != null) {
-            if (UPDATE_SINGLE_ACTION.equals(intent.getAction())) {
-                handleUpdateSingle(intent);
-            }else if (UPDATE_RADAR.equals(intent.getAction())){
-                int cityId = intent.getIntExtra("cityId", -1);
-                if (cityId == SQLiteHelper.getWidgetCityID(getApplicationContext())) {
-                    int numRadarWidgets = AppWidgetManager.getInstance(getApplicationContext()).getAppWidgetIds(new ComponentName(getApplicationContext(), RadarWidget.class)).length;
-                    int numAllInOneWidgets = AppWidgetManager.getInstance(getApplicationContext()).getAppWidgetIds(new ComponentName(getApplicationContext(), WeatherWidgetAllInOne.class)).length;
-                    if (numRadarWidgets + numAllInOneWidgets > 0) handleUpdateRadar(intent);
+        String action = getInputData().getString(ACTION);
+        int cityId = getInputData().getInt(CITY_ID, -1);
+        boolean skipUpdateInterval = getInputData().getBoolean(SKIP_UPDATE_INTERVAL, false);
+
+        if (action != null) {
+            if (UPDATE_SINGLE_ACTION.equals(action)) {
+                handleUpdateSingle(cityId);
+            } else if (UPDATE_RADAR.equals(action)) {
+                if (cityId == SQLiteHelper.getWidgetCityID(context)) {
+                    int numRadarWidgets = AppWidgetManager.getInstance(context).getAppWidgetIds(new ComponentName(context, RadarWidget.class)).length;
+                    int numAllInOneWidgets = AppWidgetManager.getInstance(context).getAppWidgetIds(new ComponentName(context, WeatherWidgetAllInOne.class)).length;
+                    if (numRadarWidgets + numAllInOneWidgets > 0) handleUpdateRadar(cityId);
                 }
             }
         }
+        return Result.success();
     }
 
-    private void handleUpdateRadar(Intent intent) {
-        int cityId = intent.getIntExtra("cityId",-1);
+    private void handleUpdateRadar(int cityId) {
         CityToWatch city = dbHelper.getCityToWatch(cityId);
-        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-        //Alternative without getting the .json would be to calculate the latest timestamp.
-        //About 40s after a 10-minute step (e.g. 10:10, 10:20,...) new tiles are available
+        RequestQueue queue = Volley.newRequestQueue(context);
 
-        // Convert current timestamp to a Calendar object
         Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis() - 45000L);  //subtract 45s as it might take about 40s for the new tiles
+        calendar.setTimeInMillis(System.currentTimeMillis() - 45000L);
 
-        // Calculate the most recent 10-minute step by rounding down
         int currentMinute = calendar.get(Calendar.MINUTE);
         int roundedMinute = (currentMinute / 10) * 10;
 
-        // Set rounded time
         calendar.set(Calendar.MINUTE, roundedMinute);
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MILLISECOND, 0);
 
-        // Get the calculated radar timestamp
         long radarTimeGMT = calendar.getTimeInMillis();
-        int zoom = RainViewerActivity.rainViewerWidgetZoom;
-        String radarUrl = "https://tilecache.rainviewer.com/v2/radar/" + radarTimeGMT/1000 + "/256/" + zoom +"/"+ city.getLatitude() +"/" + city.getLongitude() + "/2/1_1.png";
+        int zoneseconds = dbHelper.getCurrentWeatherByCityId(cityId).getTimeZoneSeconds();
 
-        ImageRequest imageRequest = new ImageRequest(radarUrl,
-                response1 -> {
-                    //Save image and data for full widget update
-                    RadarWidget.radarBitmap = response1;
-                    WeatherWidgetAllInOne.radarBitmap = response1;
-                    RadarWidget.radarTimeGMT = radarTimeGMT;
-                    WeatherWidgetAllInOne.radarTimeGMT = radarTimeGMT;
-                    RadarWidget.radarZoom = zoom;
-                    WeatherWidgetAllInOne.radarZoom = zoom;
-                    int zoneseconds = dbHelper.getCurrentWeatherByCityId(cityId).getTimeZoneSeconds();
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+        int[] radarWidgetIDs = appWidgetManager.getAppWidgetIds(new ComponentName(context, RadarWidget.class));
+        int[] allInOneWidgetIDs = appWidgetManager.getAppWidgetIds(new ComponentName(context, WeatherWidgetAllInOne.class));
 
-                    //Partial update for radar view only
-                    AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getApplicationContext());
-                    int[] widgetIDs = appWidgetManager.getAppWidgetIds(new ComponentName(getApplicationContext(), RadarWidget.class));
-                    if (widgetIDs.length > 0 ) {
-                        RemoteViews views = new RemoteViews(getApplicationContext().getPackageName(), R.layout.radar_widget);
-                        views.setImageViewBitmap(R.id.widget_radar_view, UpdateDataService.prepareRadarWidget(getApplicationContext(), city, zoom, radarTimeGMT + zoneseconds *1000L, response1));
-                        appWidgetManager.partiallyUpdateAppWidget(widgetIDs, views);
-                    }
+        if (radarWidgetIDs.length > 0) {
+            int zoom = RainViewerActivity.rainViewerWidgetZoom;
+            String radarUrl = "https://tilecache.rainviewer.com/v2/radar/" + radarTimeGMT/1000 + "/256/" + zoom +"/"+ city.getLatitude() +"/" + city.getLongitude() + "/2/1_1.png";
 
-                    widgetIDs = appWidgetManager.getAppWidgetIds(new ComponentName(getApplicationContext(), WeatherWidgetAllInOne.class));
-                    if (widgetIDs.length > 0 ) {
-                        RemoteViews views = new RemoteViews(getApplicationContext().getPackageName(), R.layout.weather_widget_all_in_one);
-                        views.setImageViewBitmap(R.id.widget_radar_view, UpdateDataService.prepareAllInOneWidget(getApplicationContext(), city, zoom, radarTimeGMT + zoneseconds *1000L, response1));
-                        appWidgetManager.partiallyUpdateAppWidget(widgetIDs, views);
-                    }
+            ImageRequest imageRequest = new ImageRequest(radarUrl,
+                    response1 -> {
+                        RadarWidget.radarBitmap = response1;
+                        RadarWidget.radarTimeGMT = radarTimeGMT;
+                        RadarWidget.radarZoom = zoom;
 
-                },
-                0, 0, ImageView.ScaleType.CENTER_CROP, Bitmap.Config.RGB_565,
-                error1 -> {
-                    // Handle the error
-                    Log.d("DownloadRadarTile:", error1.toString()+" "+radarUrl);
-                });
-        imageRequest.setRetryPolicy(
-                new DefaultRetryPolicy(
-                        3000,   //default is 1000
-                        DEFAULT_IMAGE_MAX_RETRIES,
-                        DEFAULT_IMAGE_BACKOFF_MULT));
-        queue.add(imageRequest);
+                        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.radar_widget);
+                        views.setImageViewBitmap(R.id.widget_radar_view, UpdateDataService.prepareRadarWidget(context, city, zoom, radarTimeGMT + zoneseconds *1000L, response1));
+                        appWidgetManager.partiallyUpdateAppWidget(radarWidgetIDs, views);
+                    },
+                    0, 0, ImageView.ScaleType.CENTER_CROP, Bitmap.Config.RGB_565,
+                    error1 -> {
+                        Log.d("DownloadRadarTile:", error1.toString()+" "+radarUrl);
+                    });
+            imageRequest.setRetryPolicy(
+                    new DefaultRetryPolicy(
+                            3000,
+                            DEFAULT_IMAGE_MAX_RETRIES,
+                            DEFAULT_IMAGE_BACKOFF_MULT));
+            queue.add(imageRequest);
+        }
 
+        if (allInOneWidgetIDs.length > 0) {
+            int zoomAllInOne = RainViewerActivity.rainViewerAllInOneWidgetZoom;
+            String radarUrlAllInOne = "https://tilecache.rainviewer.com/v2/radar/" + radarTimeGMT/1000 + "/256/" + zoomAllInOne +"/"+ city.getLatitude() +"/" + city.getLongitude() + "/2/1_1.png";
+
+            ImageRequest imageRequestAllInOne = new ImageRequest(radarUrlAllInOne,
+                    response1 -> {
+                        WeatherWidgetAllInOne.radarBitmap = response1;
+                        WeatherWidgetAllInOne.radarTimeGMT = radarTimeGMT;
+                        WeatherWidgetAllInOne.radarZoom = zoomAllInOne;
+
+                        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.weather_widget_all_in_one);
+                        views.setImageViewBitmap(R.id.widget_radar_view, UpdateDataService.prepareAllInOneWidget(context, city, zoomAllInOne, radarTimeGMT + zoneseconds *1000L, response1));
+                        appWidgetManager.partiallyUpdateAppWidget(allInOneWidgetIDs, views);
+                    },
+                    0, 0, ImageView.ScaleType.CENTER_CROP, Bitmap.Config.RGB_565,
+                    error1 -> {
+                        Log.d("DownloadRadarTile:", error1.toString()+" "+radarUrlAllInOne);
+                    });
+            imageRequestAllInOne.setRetryPolicy(
+                    new DefaultRetryPolicy(
+                            3000,
+                            DEFAULT_IMAGE_MAX_RETRIES,
+                            DEFAULT_IMAGE_BACKOFF_MULT));
+            queue.add(imageRequestAllInOne);
+        }
     }
 
     @NonNull
     public static Bitmap prepareAllInOneWidget(Context context, CityToWatch city, int zoom, long radarTime, Bitmap response1) {
         Bitmap textBitmap = Bitmap.createBitmap(response1.getWidth(), response1.getHeight(), response1.getConfig());
         Canvas canvas = new Canvas(textBitmap);
-        canvas.drawBitmap(response1, 0, 0, null); // draw the original image
+        canvas.drawBitmap(response1, 0, 0, null);
 
         Paint paint = new Paint();
         paint.setColor(ContextCompat.getColor(context, R.color.lightgrey));
@@ -194,7 +220,7 @@ public class UpdateDataService extends JobIntentService {
 
         paint.setStyle(Paint.Style.FILL);
         paint.setTextAlign(Paint.Align.LEFT);
-        canvas.drawText(widthDistanceMarker + " " + distanceUnit, 7 + widthDistanceMarkerPixel + 5, 238 + 8, paint); // draw the text
+        canvas.drawText(widthDistanceMarker + " " + distanceUnit, 7 + widthDistanceMarkerPixel + 5, 238 + 8, paint);
 
         paint.setTextAlign(Paint.Align.RIGHT);
         canvas.drawText(StringFormatUtils.formatTimeWithoutZone(context, radarTime), 248, 238 + 8, paint);
@@ -211,7 +237,6 @@ public class UpdateDataService extends JobIntentService {
         paint.setStyle(Paint.Style.FILL);
         canvas.drawCircle(128, 128, 2, paint);
 
-        //Round off corners
         Paint clearPaint = new Paint();
         clearPaint.setStyle(Paint.Style.STROKE);
         clearPaint.setStrokeWidth(20.0f);
@@ -224,7 +249,7 @@ public class UpdateDataService extends JobIntentService {
     public static Bitmap prepareRadarWidget(Context context, CityToWatch city, int zoom, long radarTime, Bitmap response1) {
         Bitmap textBitmap = Bitmap.createBitmap(response1.getWidth(), response1.getHeight(), response1.getConfig());
         Canvas canvas = new Canvas(textBitmap);
-        canvas.drawBitmap(response1, 0, 0, null); // draw the original image
+        canvas.drawBitmap(response1, 0, 0, null);
         Paint paint = new Paint();
         paint.setColor(ContextCompat.getColor(context, R.color.lightgrey));
         paint.setTextSize(16);
@@ -245,7 +270,7 @@ public class UpdateDataService extends JobIntentService {
 
         paint.setStyle(Paint.Style.FILL);
         paint.setTextAlign(Paint.Align.LEFT);
-        canvas.drawText(widthDistanceMarker + " " + distanceUnit, 10 + widthDistanceMarkerPixel + 10, 240 + 5, paint); // draw the text
+        canvas.drawText(widthDistanceMarker + " " + distanceUnit, 10 + widthDistanceMarkerPixel + 10, 240 + 5, paint);
 
         paint.setTextAlign(Paint.Align.RIGHT);
         canvas.drawText(StringFormatUtils.formatTimeWithoutZone(context, radarTime), 240, 240 + 5, paint);
@@ -262,7 +287,6 @@ public class UpdateDataService extends JobIntentService {
         paint.setStyle(Paint.Style.FILL);
         canvas.drawCircle(128, 128, 2, paint);
 
-        //Round off corners
         Paint clearPaint = new Paint();
         clearPaint.setStyle(Paint.Style.STROKE);
         clearPaint.setStrokeWidth(20.0f);
@@ -285,18 +309,17 @@ public class UpdateDataService extends JobIntentService {
         return closest;
     }
 
-    private void handleUpdateSingle(Intent intent) {
-        int cityId = intent.getIntExtra("cityId",-1);
+    private void handleUpdateSingle(int cityId) {
         CityToWatch city = dbHelper.getCityToWatch(cityId);
         if (city == null) {
             return;
         }
 
-        IHttpRequestForWeatherAPI omHttpRequestForWeatherAPI = new OMHttpRequestForWeatherAPI(getApplicationContext());
+        IHttpRequestForWeatherAPI omHttpRequestForWeatherAPI = new OMHttpRequestForWeatherAPI(context);
         omHttpRequestForWeatherAPI.perform(city.getLatitude(), city.getLongitude(), cityId);
     }
 
-    private boolean isOnline(int timeOut) { //https://stackoverflow.com/questions/9570237/android-check-internet-connection
+    private boolean isOnline(int timeOut) {
         InetAddress inetAddress = null;
         try {
             Future<InetAddress> future = Executors.newSingleThreadExecutor().submit(() -> {

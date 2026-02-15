@@ -84,8 +84,10 @@
 
     <string name="settings_interval_quarter">15 分钟</string>
     <string name="settings_interval_half">30 分钟</string>
-    <string name="settings_interval_one">1 小时</string>
-    <string name="settings_interval_two">2 小时</string>
+    <string name="settings_interval_45">45 分钟</string>
+    <string name="settings_interval_60">1 小时</string>
+    <string name="settings_interval_120">2 小时</string>
+    <string name="settings_interval_180">3 小时</string>	
     <string name="settings_interval_six">6 小时</string>
     <string name="settings_interval_twelve">12 小时</string>
     <string name="settings_interval_twentyfour">24 小时</string>

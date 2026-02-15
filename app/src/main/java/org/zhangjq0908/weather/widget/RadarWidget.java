@@ -1,9 +1,7 @@
 package org.zhangjq0908.weather.widget;
 
 
-import static androidx.core.app.JobIntentService.enqueueWork;
 import static org.zhangjq0908.weather.database.SQLiteHelper.getWidgetCityID;
-import static org.zhangjq0908.weather.services.UpdateDataService.SKIP_UPDATE_INTERVAL;
 
 import android.Manifest;
 import android.app.PendingIntent;
@@ -58,11 +56,7 @@ public class RadarWidget extends AppWidgetProvider {
 
             int cityID = getWidgetCityID(context);
             if(prefManager.getBoolean("pref_GPS", false) && !prefManager.getBoolean("pref_GPS_manual", false)) updateLocation(context, cityID,false);
-            Intent intent = new Intent(context, UpdateDataService.class);
-            intent.setAction(UpdateDataService.UPDATE_SINGLE_ACTION);
-            intent.putExtra("cityId", cityID);
-            intent.putExtra(SKIP_UPDATE_INTERVAL, true);
-            enqueueWork(context, UpdateDataService.class, 0, intent);
+            UpdateDataService.enqueueWork(context, UpdateDataService.UPDATE_SINGLE_ACTION, cityID, true);
         }
     }
 
@@ -142,13 +136,9 @@ public class RadarWidget extends AppWidgetProvider {
         }
         views.setOnClickPendingIntent(R.id.widget_layout, pendingIntent);
 
-        if (radarBitmap != null) views.setImageViewBitmap(R.id.widget_radar_view, UpdateDataService.prepareRadarWidget(context, city, radarZoom, radarTimeGMT + zoneseconds *1000L, radarBitmap));
+        if (radarBitmap != null) views.setImageViewBitmap(R.id.widget_radar_view, UpdateDataService.prepareRadarWidget(context, city, RainViewerActivity.rainViewerWidgetZoom, radarTimeGMT + zoneseconds *1000L, radarBitmap));
 
-        // Now update radar
-        Intent intent3 = new Intent(context, UpdateDataService.class);
-        intent3.setAction(UpdateDataService.UPDATE_RADAR);
-        intent3.putExtra("cityId", getWidgetCityID(context));
-        enqueueWork(context, UpdateDataService.class, 0, intent3);
+        UpdateDataService.enqueueWork(context, UpdateDataService.UPDATE_RADAR, getWidgetCityID(context), false);
 
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);

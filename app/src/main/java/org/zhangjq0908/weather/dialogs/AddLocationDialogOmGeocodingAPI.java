@@ -68,7 +68,6 @@ public class AddLocationDialogOmGeocodingAPI extends DialogFragment {
     String lang="en";
 
     public AddLocationDialogOmGeocodingAPI() {
-        setRetainInstance(true);
     }
 
     @Override

@@ -37,7 +37,7 @@ public final class WeatherSyncScheduler {
 
         workManager.enqueueUniquePeriodicWork(
                 PERIODIC_WORK_NAME,
-                ExistingPeriodicWorkPolicy.REPLACE,
+                ExistingPeriodicWorkPolicy.UPDATE,
                 periodicRequest
         );
 

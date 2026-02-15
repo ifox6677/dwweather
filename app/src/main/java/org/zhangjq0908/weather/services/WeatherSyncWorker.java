@@ -1,9 +1,6 @@
 package org.zhangjq0908.weather.services;
 
-import static androidx.core.app.JobIntentService.enqueueWork;
-
 import android.content.Context;
-import android.content.Intent;
 
 import androidx.annotation.NonNull;
 import androidx.work.Worker;
@@ -29,10 +26,7 @@ public class WeatherSyncWorker extends Worker {
         }
 
         for (CityToWatch city : cities) {
-            Intent intent = new Intent(getApplicationContext(), UpdateDataService.class);
-            intent.setAction(UpdateDataService.UPDATE_SINGLE_ACTION);
-            intent.putExtra("cityId", city.getCityId());
-            enqueueWork(getApplicationContext(), UpdateDataService.class, 0, intent);
+            UpdateDataService.enqueueWork(getApplicationContext(), UpdateDataService.UPDATE_SINGLE_ACTION, city.getCityId(), false);
         }
 
         return Result.success();

@@ -85,11 +85,6 @@
             android:name="org.zhangjq0908.weather.firststart.TutorialActivity"
             android:theme="@style/AppTheme.NoActionBar" />
 
-        <service
-            android:name="org.zhangjq0908.weather.services.UpdateDataService"
-            android:permission="android.permission.BIND_JOB_SERVICE"
-            android:exported="false" />
-
         <receiver android:name="org.zhangjq0908.weather.widget.WeatherWidget"
             android:exported="true">
             <intent-filter>

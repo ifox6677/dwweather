@@ -80,7 +80,8 @@ public class RainViewerActivity extends AppCompatActivity {
     private boolean crossfadeRunning = false;
     private List<TilesOverlayEntry> radarTilesOverlayEntries;
     private GeoPoint startPoint;
-    public static int rainViewerWidgetZoom = 7;
+    public static int rainViewerWidgetZoom = 6;
+    public static int rainViewerAllInOneWidgetZoom = 6;
     public static int rainViewerMaxZoom = 11;  //max 7 starting Jan 2026
     private double initialZoom = 7d;
 
@@ -193,7 +194,7 @@ public class RainViewerActivity extends AppCompatActivity {
     radarTilesOverlayEntries = new ArrayList<>();
     licenseText = findViewById(R.id.license);
     String text = "© <a href=\"https://www.openstreetmap.org/copyright/\">OpenStreetMap</a> contributors &amp; <a href=\"https://www.rainviewer.com/api.html\">RainViewer</a>";
-    licenseText.setText(Html.fromHtml(text));
+    licenseText.setText(Html.fromHtml(text, Html.FROM_HTML_MODE_COMPACT));
     licenseText.setMovementMethod(LinkMovementMethod.getInstance());
     }
 

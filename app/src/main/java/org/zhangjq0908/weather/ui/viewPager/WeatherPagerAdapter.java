@@ -1,12 +1,14 @@
 package org.zhangjq0908.weather.ui.viewPager;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Lifecycle;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
+import androidx.work.Data;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
 
 import org.zhangjq0908.weather.database.CityToWatch;
 import org.zhangjq0908.weather.database.CurrentWeatherData;
@@ -19,9 +21,6 @@ import org.zhangjq0908.weather.ui.updater.IUpdateableCityUI;
 
 import java.util.Collections;
 import java.util.List;
-
-import static androidx.core.app.JobIntentService.enqueueWork;
-import static org.zhangjq0908.weather.services.UpdateDataService.SKIP_UPDATE_INTERVAL;
 
 /**
  * Created by thomagglaser on 07.08.2017.
@@ -68,11 +67,17 @@ public class WeatherPagerAdapter extends FragmentStateAdapter implements IUpdate
     }
 
     public static void refreshSingleData(Context context, Boolean asap, int cityId) {
-        Intent intent = new Intent(context, UpdateDataService.class);
-        intent.setAction(UpdateDataService.UPDATE_SINGLE_ACTION);
-        intent.putExtra(SKIP_UPDATE_INTERVAL, asap);
-        intent.putExtra("cityId",cityId);
-        enqueueWork(context, UpdateDataService.class, 0, intent);
+        Data inputData = new Data.Builder()
+                .putString(UpdateDataService.ACTION, UpdateDataService.UPDATE_SINGLE_ACTION)
+                .putBoolean(UpdateDataService.SKIP_UPDATE_INTERVAL, asap)
+                .putInt(UpdateDataService.CITY_ID, cityId)
+                .build();
+
+        OneTimeWorkRequest workRequest = new OneTimeWorkRequest.Builder(UpdateDataService.class)
+                .setInputData(inputData)
+                .build();
+
+        WorkManager.getInstance(context).enqueue(workRequest);
     }
 
 
